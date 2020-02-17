@@ -5,13 +5,14 @@ _play () {
 		_career
 		_clandungeon
 		_trade
+		_coliseum
 #		_torstop
 	}
 _crono
 # /game time
 	if [[ $HOUR -lt 8 || $HOUR -eq 23 ]] ; then
 		_all
-#		_coliseum
+		_coliseum
 		_sleep
 		_crono
 # /Valley of the Immortals 10:00:00 - 16:00:00 - 22:00:00
@@ -34,22 +35,22 @@ _crono
 #		SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" $URL/flagfight/enterFight)
 #		_crono
 # /Clan coliseum 10:30:00 - 15:00:00
-#	elif [[ -n $CLD && $HOUR -eq 10 && $MIN -ge 15 && $MIN -le 30 || -n $CLD && $HOUR -eq 14 && $MIN -ge 45 ]] ; then
-#		START=`date +%M`
-#		while [[ $MIN -ge 15 && $MIN -le 30 || $MIN -ge 45 && $MIN -le 59 ]] ; do
-#	                END=$(expr `date +%M` \- $START)
-#        	        [[ $END -gt 16 ]] && break
-#			echo 'Clan coliseum will be started...'
-#			sleep 30
-#			_crono
-#			if [[ $MIN -ge 29 || $MIN -ge 59 ]] ; then
-#				SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" "$URL/clancoliseum/?close=reward")
-#				SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" "$URL/clancoliseum/enterFight")
-#				_clancoliseum
-#				break
-#			fi
-#		done
-#		_crono
+	elif [[ -n $CLD && $HOUR -eq 10 && $MIN -ge 15 && $MIN -le 30 || -n $CLD && $HOUR -eq 14 && $MIN -ge 45 ]] ; then
+		START=`date +%M`
+		while [[ $MIN -ge 15 && $MIN -le 30 || $MIN -ge 45 && $MIN -le 59 ]] ; do
+	                END=$(expr `date +%M` \- $START)
+        	        [[ $END -gt 16 ]] && break
+			echo 'Clan coliseum will be started...'
+			sleep 30
+			_crono
+			if [[ $MIN -ge 29 || $MIN -ge 59 ]] ; then
+				SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" "$URL/clancoliseum/?close=reward")
+				SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" "$URL/clancoliseum/enterFight")
+				_clancoliseum
+				break
+			fi
+		done
+		_crono
 # /Clan tournament 11:00:00 - 19:00:00
 	elif [[ -n $CLD && $HOUR -eq 10 && $MIN -ge 45 || -n $CLD && $HOUR -eq 18 && $MIN -ge 45 ]] ; then
 		START=`date +%M`

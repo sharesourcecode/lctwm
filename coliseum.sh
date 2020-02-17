@@ -11,13 +11,13 @@ _coliseum () {
 	SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" $URL/coliseum)
 	ACCESS=$(echo $SRC | sed 's/href=/\n/g' | grep '/enterFight/' | head -n1 | cut -d\' -f2)
 	echo -e " 👣 Entering...\n$ACCESS"
-	SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" ""$URL$ACCESS"?end_fight=true")
+	SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" $URL$ACCESS?end_fight=true)
 # /wait
 	echo " 😴 Waiting..."
 	ACCESS=$(echo $SRC | sed 's/href=/\n/g' | grep '/coliseum/' | head -n1 | cut -d\' -f2)
         EXIT=$(echo $SRC | grep -o '/leaveFight/' | head -n1)
 	START=`date +%M`
-	while [[ -n $EXIT ]] ; do
+	while [[ -n $EXIT && -z $ATK ]] ; do
                 END=$(expr `date +%M` \- $START)
                 [[ $END -gt 7 ]] && break
 		echo -e " 💤	...\n$ACCESS"
@@ -28,7 +28,7 @@ _coliseum () {
 	FULL=$(echo $SRC | sed "s/alt/\\n/g" | grep 'hp' | head -n1 | cut -d\< -f2 | cut -d\> -f2 | tr -cd '[[:digit:]]')
 	_access
 	HP3=$HP1
-	until [[ -n $BEXIT && -z $OUTGATE ]] ; do
+	until [[ -z $ATK && -z $OUTGATE ]] ; do
 # /dodge
 		[[ $HP3 -ne $HP1 ]] && echo '🛡️' && \
 		SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" "$URL$DODGE") && \
