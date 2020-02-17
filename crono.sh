@@ -1,7 +1,6 @@
 # /time
 _crono () {
-	HOUR=$(w3m -cookie -debug -dump_source -o accept_encoding=='*;q=0' "$URL" -o user_agent="$(shuf -n1 .ua)" | sed 's/--/\n/g' | grep '/online/' | cut -d\: -f1 | tr -cd '[:digit:]')
-#	HOUR=$(lynx -cfg=~/twm/cfg1 -source "$URL" -useragent="$(shuf -n1 .ua)" | sed 's/--/\n/g' | grep '/online/' | cut -d\: -f1 | tr -cd '[:digit:]')
+	HOUR=$(curl -b $HOME/lctwm/.cookie -A "$(shuf -n1 .ua)" "$URL" | sed 's/--/\n/g' | grep '/online/' | cut -d\: -f1 | tr -cd '[:digit:]')
 	[[ $HOUR = 00 ]] && HOUR=0
 	[[ $HOUR = 01 ]] && HOUR=1
 	[[ $HOUR = 02 ]] && HOUR=2
@@ -12,8 +11,6 @@ _crono () {
 	[[ $HOUR = 07 ]] && HOUR=7
 	[[ $HOUR = 08 ]] && HOUR=8
 	[[ $HOUR = 09 ]] && HOUR=9
-#	MIN=$(w3m -cookie -debug -dump_source -o accept_encoding=='*;q=0' "$URL" -o user_agent="$(shuf -n1 .ua)" | sed 's/--/\n/g' | grep '/online/' | cut -d\: -f2 | tr -cd '[:digit:]')
-#	MIN=$(lynx -cfg=~/twm/cfg1 -source "$URL" -useragent="$(shuf -n1 .ua)" | sed 's/--/\n/g' | grep '/online/' | cut -d\: -f2 | tr -cd '[:digit:]')
 	MIN=`date +%M`
 	[[ $MIN = 00 ]] && MIN=0
 	[[ $MIN = 01 ]] && MIN=1

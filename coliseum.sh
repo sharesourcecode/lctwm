@@ -1,16 +1,17 @@
 _coliseum () {
+	COOKIE=$HOME/lctwm/.cookie
 # /enterFight
-	SRC=$(w3m -cookie -debug -o accept_encoding=='*;q=0' $URL/settings/graphics/1 -o user_agent="$(shuf -n1 .ua)")
+	SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" $URL/settings/graphics/1)
 	HPER='49'
 	RPER='9'
 	ITVL='1.8'
 	echo -e "\nColiseum"
 	echo $URL
-	w3m -cookie -debug -o accept_encoding=='*;q=0' $URL/coliseum/?end_fight=true -o user_agent="$(shuf -n1 .ua)" | head -n11 | tail -n7 | sed "/\[2hit/d;/\[str/d;/combat/d"
-	SRC=$(w3m -cookie -debug -dump_source -o accept_encoding=='*;q=0' $URL/coliseum -o user_agent="$(shuf -n1 .ua)")
+	curl -b $COOKIE -A "$(shuf -n1 .ua)" $URL/coliseum/?end_fight=true | head -n11 | tail -n7 | sed "/\[2hit/d;/\[str/d;/combat/d"
+	SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" $URL/coliseum)
 	ACCESS=$(echo $SRC | sed 's/href=/\n/g' | grep '/enterFight/' | head -n1 | cut -d\' -f2)
 	echo -e " 👣 Entering...\n$ACCESS"
-	SRC=$(w3m -cookie -debug -dump_source -o accept_encoding=='*;q=0' ""$URL$ACCESS"?end_fight=true" -o user_agent="$(shuf -n1 .ua)")
+	SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" ""$URL$ACCESS"?end_fight=true")
 # /wait
 	echo " 😴 Waiting..."
 	ACCESS=$(echo $SRC | sed 's/href=/\n/g' | grep '/coliseum/' | head -n1 | cut -d\' -f2)
@@ -20,7 +21,7 @@ _coliseum () {
                 END=$(expr `date +%M` \- $START)
                 [[ $END -gt 7 ]] && break
 		echo -e " 💤	...\n$ACCESS"
-		SRC=$(w3m -cookie -debug -dump_source -o accept_encoding=='*;q=0' $URL/coliseum -o user_agent="$(shuf -n1 .ua)")
+		SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" $URL/coliseum)
 		ACCESS=$(echo $SRC | sed 's/href=/\n/g' | grep '/coliseum/' | head -n1 | cut -d\' -f2)
 		EXIT=$(echo $SRC | grep -o '/leaveFight/' | head -n1)
 	done
@@ -30,26 +31,25 @@ _coliseum () {
 	until [[ -n $BEXIT && -z $OUTGATE ]] ; do
 # /dodge
 		[[ $HP3 -ne $HP1 ]] && echo '🛡️' && \
-		SRC=$(w3m -cookie -debug -dump_source -o accept_encoding=='*;q=0' "$URL$DODGE" -o user_agent="$(shuf -n1 .ua)") && \
+		SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" "$URL$DODGE") && \
 		HP3=$HP1 && _access
 # /atk
 		echo '🎯' && \
-		SRC=$(w3m -cookie -debug -dump_source -o accept_encoding=='*;q=0' "$URL$ATK" -o user_agent="$(shuf -n1 .ua)")
+		SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" "$URL$ATK")
 		_access
 # /heal
 		[[ $HP1 -le $HLHP ]] && ITVL='2.6' && echo "🆘 HP < $HPER%" && \
-		SRC=$(w3m -cookie -debug -dump_source -o accept_encoding=='*;q=0' "$URL$HEAL" -o user_agent="$(shuf -n1 .ua)") && \
+		SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" "$URL$HEAL") && \
 		_access
 # /random
 		[[ $WDRED == white && `expr $HP1 + $HP1 \* $RPER \/ 100` -le $HP2 ]] && echo '🔁' && \
-		SRC=$(w3m -cookie -debug -dump_source -o accept_encoding=='*;q=0' "$URL$ATKRND" -o user_agent="$(shuf -n1 .ua)") && \
+		SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" "$URL$ATKRND") && \
 		_access
 		sleep $ITVL
 	done
 # /view
 	echo ""
-	w3m -cookie -debug -o accept_encoding=='*;q=0' $URL/coliseum -o user_agent="$(shuf -n1 .ua)" | head -n15 | tail -n14 | sed "/\[user\]/d;/\[arrow\]/d;/\ \[/d"
+	curl -b $COOKIE -A "$(shuf -n1 .ua)" $URL/coliseum | head -n15 | tail -n14 | sed "/\[user\]/d;/\[arrow\]/d;/\ \[/d"
 	echo "Coliseum (✔)"
-	SRC=$(w3m -cookie -debug -o accept_encoding=='*;q=0' $URL/settings/graphics/0 -o user_agent="$(shuf -n1 .ua)")
+	SRC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" $URL/settings/graphics/0)
 }
-

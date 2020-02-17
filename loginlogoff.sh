@@ -1,8 +1,8 @@
 _loginlogoff () {
 # /login/logoff
-	ACC=$(w3m -cookie -debug -o accept_encoding=='*;q=0' "$URL/user" -o user_agent="$(shuf -n1 .ua)" | grep "\[level" | cut -d" " -f2)
-#	ACC=$(lynx -cfg=~/twm/cfg1 "$URL/user" -useragent="$(shuf -n1 .ua)" | grep "\[level" | cut -d" " -f2)
-	[[ -n $ACC ]] && i=10 && \
+	COOKIE=$HOME/lctwm/.cookie
+	ACC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" "$URL/user" | sed 's/src=/\n/g' | grep '/images/icon/race/' | cut -d\> -f2 | cut -d\< -f1) # | grep [[:alpha:]])
+	[[ -n $ACC ]] && i=5 && \
           until [[ $i -lt 1 ]]; do
 		clear
 		echo -e "[Wait to $ACC... ("$i"s) - ENTER to other account] \n"
@@ -12,16 +12,14 @@ _loginlogoff () {
 	clear
 	while [[ -z $ACC ]]; do
 		function _login () {
-# /logoff2x
-			$(w3m -cookie -debug -o accept_encoding=='*;q=0' "$URL/?exit" -o user_agent="$(shuf -n1 .ua)") 2&>-
-			$(w3m -cookie -debug -o accept_encoding=='*;q=0' "$URL/?exit" -o user_agent="$(shuf -n1 .ua)") 2&>-
-#			$(lynx -cfg=~/twm/cfg1 "$URL/?exit" -useragent="$(shuf -n1 .ua)") 2&>-
+# /logoff
+			curl -b $COOKIE "$URL/?exit" -A "$(shuf -n1 .ua)" 2&>-
 			unset username; unset password
 			echo -e "\nIn case of error will repeat"
-			echo -n 'Username: '
-			read username
+			echo -n 'login: '
+			read login
 			echo -e "\n"
-			prompt="Password: "
+			prompt="pass: "
 			charcount=0
 			while IFS= read -p "$prompt" -r -s -n 1 char; do
 # /Enter - accept password
@@ -33,27 +31,38 @@ _loginlogoff () {
 				if [ $charcount -gt 0 ]; then
 					charcount=$((charcount - 1))
 					prompt=$'\b \b'
-					password="${password%?}"
+					pass="${pass%?}"
 				else
 					prompt=''
 				fi
 			else
 				charcount=$((charcount + 1))
 				prompt='🔒'
-				password+="$char"
+				pass+="$char"
 			fi
 			done
 			echo -e "\n	Please wait..."
-			echo -e "login=$username&pass=$password" >$HOME/.tmp/login.txt
-# /login2x
-#			$(echo -e "login=$username&pass=$password" | lynx -cfg=~/twm/cfg1 -post_data "$URL/?sign_in=1" -useragent="$(shuf -n1 .ua)") 2&>-
+# /create log
+			LOGIN=`echo "$login" | tr '[:upper:]' '[:lower:]' | sed "s, ,~,g"`
+
+			rm $HOME/lctwm/*.l &> /dev/null
+			for i in `echo "/:^$LOGIN^$pass^^✓"|fold -w1`
+			do
+				echo 'key '$i >> w.l
+			done
+			sed "s/key ~/key <space>/g" w.l >y.l && \
+			sed "s/key ^/key ^J/g" y.l >k.l
+			sed "s/key ✓/key ^C/g" k.l >.lsign
+pwd
+# /cookie save
+#			rm $COOKIE &> /dev/null
+			lynx -cfg=$HOME/lctwm/cfg1 -cmd_script=$HOME/lctwm/.lsign "$URL/?sign_in=1" -useragent="$(shuf -n1 .ua)"
 			unset username; unset password
-			$(w3m -cookie -debug -post $HOME/.tmp/login.txt -o accept_encoding=='*;q=0' "$URL/?sign_in=1" -o user_agent="$(shuf -n1 .ua)") 2&>-
-			$(w3m -cookie -debug -post $HOME/.tmp/login.txt -o accept_encoding=='*;q=0' "$URL/?sign_in=1" -o user_agent="$(shuf -n1 .ua)") 2&>-
-			rm $HOME/.tmp/login.txt
+			rm $HOME/lctwm/*.l &> /dev/null
 		}
 		_login
-		clear
-		ACC=$(w3m -cookie -debug -o accept_encoding=='*;q=0' "$URL/user" -o user_agent="$(shuf -n1 .ua)" | grep "\[user")
+#		clear
+		ACC=$(curl -b $COOKIE -A "$(shuf -n1 .ua)" "$URL/user" | sed 's/src=/\n/g' | grep '/images/icon/race/' | cut -d\> -f2 | cut -d\< -f1) #| grep [[:alpha:]])
 	done
+	echo "$ACC"
 }

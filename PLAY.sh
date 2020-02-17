@@ -1,6 +1,6 @@
 #!/bin/bash
 # /sources
-cd ~/twm
+cd ~/lctwm
 . torstop.sh ; . requeriments.sh ; . loginlogoff.sh
 . clanid.sh ; . crono.sh ; . arena.sh ; . coliseum.sh
 . campaign.sh ; . play.sh ; . altars.sh ; . clanfight.sh
@@ -48,7 +48,7 @@ while true ; do
 #		_torstop
 	fi
 	_play
-	_sync
+#	_sync
 done
 kill -9 $$
 exit
