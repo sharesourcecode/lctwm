@@ -14,7 +14,7 @@ _loginlogoff () {
 		function _login () {
 # /logoff
 			curl -b $COOKIE "$URL/?exit" -A "$(shuf -n1 .ua)" 2&>-
-			unset username; unset password
+			unset login; unset pass
 			echo -e "\nIn case of error will repeat"
 			echo -n 'login: '
 			read login
@@ -57,7 +57,7 @@ pwd
 # /cookie save
 #			rm $COOKIE &> /dev/null
 			lynx -cfg=$HOME/lctwm/cfg1 -cmd_script=$HOME/lctwm/.lsign "$URL/?sign_in=1" -useragent="$(shuf -n1 .ua)"
-			unset username; unset password
+			unset login; unset pass
 			rm $HOME/lctwm/*.l &> /dev/null
 		}
 		_login
