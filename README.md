@@ -1,5 +1,5 @@
-# twm(Titans War Macro)
-***TESTE BETA***
+# lctwm(Titans War Macro[lynx + curl)
+***EXPERIMENTAL***
 **Nescessário level 16+ e +50 pontos de treinamento**
 
 Script macros para Titans war mobile game em todos servidores.
@@ -9,24 +9,19 @@ Script macros para Titans war mobile game em todos servidores.
 **apt install git -y**
 
 
-2. Digite ou cole estes dois comandos, um por vez para baixar o twm, confirme-os com ENTER(O link faz parte do segundo comando):
+2. Digite ou cole estes dois comandos, um por vez para baixar o lctwm, confirme-os com ENTER(O link faz parte do segundo comando):
 
 **cd $HOME**
 
-**git clone https://github.com/sharesourcecode/twm.git**
+**git clone https://github.com/sharesourcecode/lctwm.git**
 
 
-3. Para executar o twm(ENTER para confirmar):
+3. Para executar o lctwm(ENTER para confirmar):
 
-**bash $HOME/twm/PLAY.sh**
+**bash $HOME/lctwm/PLAY.sh**
 
 Ou:
-**bash ~/twm/PLAY.sh**
+**bash ~/lctwm/PLAY.sh**
 
 
 **Para interroper (CTRL c) ou force a parada do app Termux**
-
-*Faço atualizações e correções periodicas, caso queira manter os scripts atualizados em seu dispositivo reexecute as instruções acima a partir da segunda etapa.
-
-As atualizações são exibidas nesta página: https://github.com/sharesourcecode/twm/commits/master
-Clique em um dos códigos ao lado direito para saber o que foi alterado.* 
