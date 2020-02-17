@@ -6,7 +6,7 @@ _requeriments () {
 	cd $HOME/twm
 # /update script and dependencies
 	echo -e "\nUpgrading..."
-	apt install w3m curl -y || sudo apt install w3m curl -y
+	apt install lynx curl -y || sudo apt install lynx curl -y
 	echo -e "👉 Please wait...☕👴"
 _sync () {
 	curl https://github.com/sharesourcecode/twm/raw/master/LICENSE -O -L &> /dev/null &
